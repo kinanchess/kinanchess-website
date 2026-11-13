@@ -173,6 +173,22 @@ section{padding:96px 0}
 .quote footer{margin-top:18px;color:var(--muted);font-size:15px;background:none;padding:0}
 .empty{background:rgba(22,20,17,.55);backdrop-filter:blur(10px);border:1.5px dashed var(--line);border-radius:18px;padding:36px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
 .empty p{font-size:18px;max-width:52ch}
+.quote .qstars{color:var(--gold);letter-spacing:2px;font-size:18px;margin-top:26px}
+.quote .qstars+p{margin-top:10px}
+.fb-cta{margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:22px 28px;border:1px solid var(--line);border-radius:18px;background:rgba(22,20,17,.4)}
+.fb-cta p{color:#D6CFC3;font-size:17px}
+.fb-form{margin-top:20px;max-width:760px;scroll-margin-top:96px}
+.fb-form[hidden]{display:none}
+.fb-form h3{font-family:var(--display);font-size:24px}
+.fb-note{font-size:14px;color:var(--dark-muted)}
+.stars-in{border:0;padding:0;margin:0}
+.stars-in legend{font-weight:600;font-size:15px;margin-bottom:6px;padding:0}
+.stars-row{display:inline-flex;flex-direction:row-reverse;gap:4px}
+.stars-row input{position:absolute;opacity:0;width:1px;height:1px}
+.stars-row label{font-size:34px;line-height:1;margin:0;color:#D8D0C2;cursor:pointer;transition:color .15s,transform .15s}
+.stars-row input:checked~label,.stars-row label:hover,.stars-row label:hover~label{color:var(--gold)}
+.stars-row input:focus-visible+label{outline:2px solid var(--dark);outline-offset:2px;border-radius:4px}
+.stars-row label:hover{transform:scale(1.12)}
 
 /* contact */
 .contact{background:transparent;color:var(--ink)}
@@ -394,6 +410,40 @@ form .btn[disabled]{opacity:.6;cursor:wait}
   <div class="wrap">
     <div class="sec-head reveal"><h2 data-i18n="t_title">What students say</h2></div>
     <div class="quotes" id="quotes"></div>
+
+    <div class="fb-cta reveal" id="fb-cta">
+      <p data-i18n="fb_cta_p">Taking lessons with me? I'd love to hear how it's going.</p>
+      <button type="button" class="btn btn-ghost" id="fb-open" aria-expanded="false" aria-controls="feedback" data-i18n="fb_cta_btn">Leave your feedback</button>
+    </div>
+
+    <form id="feedback" class="fb-form" hidden novalidate>
+      <h3 data-i18n="fb_title">Share your experience</h3>
+      <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <fieldset class="stars-in">
+        <legend data-i18n="fb_rating">Your rating</legend>
+        <div class="stars-row">
+          <input type="radio" id="r5" name="rating" value="5" checked><label for="r5" title="5">★</label>
+          <input type="radio" id="r4" name="rating" value="4"><label for="r4" title="4">★</label>
+          <input type="radio" id="r3" name="rating" value="3"><label for="r3" title="3">★</label>
+          <input type="radio" id="r2" name="rating" value="2"><label for="r2" title="2">★</label>
+          <input type="radio" id="r1" name="rating" value="1"><label for="r1" title="1">★</label>
+        </div>
+      </fieldset>
+      <div class="row">
+        <div><label for="fb-name" data-i18n="fb_name">Your first name</label><input id="fb-name" name="fb_name" maxlength="60" required autocomplete="given-name"></div>
+        <div><label for="fb-role" data-i18n="fb_role">You are</label>
+          <select id="fb-role" name="fb_role">
+            <option value="adult" data-i18n="fb_r_adult">An adult student</option>
+            <option value="young" data-i18n="fb_r_young">A young student</option>
+            <option value="parent" data-i18n="fb_r_parent">A parent of a student</option>
+          </select></div>
+      </div>
+      <div><label for="fb-msg" data-i18n="fb_msg">Your feedback</label>
+        <textarea id="fb-msg" name="fb_msg" maxlength="1000" required data-i18n-ph="fb_msg_ph" placeholder="What did you learn? How have the lessons helped you?"></textarea></div>
+      <p class="fb-note" data-i18n="fb_note">Only your first name and your feedback will appear on the website.</p>
+      <button class="btn btn-gold" type="submit" data-i18n="fb_send">Send my feedback</button>
+      <p class="status" id="fb-status" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
 
@@ -493,7 +543,16 @@ f_level:"Niveau",o_l1:"Grand débutant",o_l2:"Connaît les règles",o_l3:"Joueur
 f_msg:"Message",f_msg_ph:"Vos objectifs, votre âge ou celui de votre enfant, et vos disponibilités.",
 f_send:"Envoyer ma demande",ft:"Cours d'échecs en ligne et à Strasbourg",
 s_sending:"Envoi en cours…",s_ok:"Merci ! Votre message est envoyé. Je vous réponds sous 24 heures.",
-s_err:"Le message n'a pas pu être envoyé. Vérifiez votre connexion et réessayez.",s_req:"Merci de remplir votre nom, votre e-mail et votre message."
+s_err:"Le message n'a pas pu être envoyé. Vérifiez votre connexion et réessayez.",s_req:"Merci de remplir votre nom, votre e-mail et votre message.",
+fb_cta_p:"Vous prenez des cours avec moi ? J'aimerais savoir comment ça se passe.",fb_cta_btn:"Laisser mon avis",
+fb_title:"Partagez votre expérience",fb_rating:"Votre note",fb_name:"Votre prénom",fb_role:"Vous êtes",
+fb_r_adult:"Un élève adulte",fb_r_young:"Un jeune élève",fb_r_parent:"Un parent d'élève",
+fb_msg:"Votre avis",fb_msg_ph:"Qu'avez-vous appris ? En quoi les cours vous ont-ils aidé ?",
+fb_note:"Seuls votre prénom et votre avis apparaîtront sur le site.",fb_send:"Envoyer mon avis",
+fb_req:"Merci d'indiquer votre prénom et un avis d'au moins 10 caractères.",
+fb_ok:"Merci beaucoup ! Votre avis a bien été reçu et apparaîtra sur le site après validation.",
+fb_err:"L'avis n'a pas pu être envoyé. Vérifiez votre connexion et réessayez.",
+role_adult:"élève adulte",role_young:"jeune élève",role_parent:"parent d'élève"
 }};
 Object.assign(T.en,{
 cap0:"Black's knight and bishop are both aiming at f2.",
@@ -503,7 +562,11 @@ cap3:"Castling defends f2 and puts the king in safety.",
 t_empty:"My students' first reviews are coming soon. The best way to get to know me is a free trial lesson.",
 t_empty_btn:"Book the free trial",
 s_sending:"Sending…",s_ok:"Thank you! Your message is sent. I'll reply within 24 hours.",
-s_err:"The message couldn't be sent. Check your connection and try again.",s_req:"Please fill in your name, email and message."});
+s_err:"The message couldn't be sent. Check your connection and try again.",s_req:"Please fill in your name, email and message.",
+fb_req:"Please enter your first name and at least 10 characters of feedback.",
+fb_ok:"Thank you so much! Your feedback was received and will appear on the site once approved.",
+fb_err:"Your feedback couldn't be sent. Check your connection and try again.",
+role_adult:"adult student",role_young:"young student",role_parent:"parent of a student"});
 document.querySelectorAll("[data-i18n]").forEach(el=>T.en[el.dataset.i18n]=el.textContent);
 document.querySelectorAll("[data-i18n-html]").forEach(el=>T.en[el.dataset.i18nHtml]=el.innerHTML);
 document.querySelectorAll("[data-i18n-ph]").forEach(el=>T.en[el.dataset.i18nPh]=el.placeholder);
@@ -526,16 +589,33 @@ function setLang(l){
   try{localStorage.setItem("kc_lang",l)}catch(e){}
 }
 
-/* testimonials */
+/* testimonials
+   Student reviews are stored in Supabase (project "kinan-office", table "testimonials").
+   A new review stays hidden until you set approved = true in the Supabase Table Editor. */
+const SB_URL="https://wwqsidglvthemcgqxtde.supabase.co";
+const SB_KEY="sb_publishable_3cpG-AJFviGoVE_iUvkKag_3ctylHl3"; // public key, safe in the browser
+let STUDENT_REVIEWS=[];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function renderQuotes(){
   const box=document.getElementById("quotes");
-  if(!TESTIMONIALS.length){
+  const all=[
+    ...STUDENT_REVIEWS.map(r=>({text:esc(r.message),who:esc(r.name)+(r.role?", "+esc(t("role_"+r.role)||r.role):""),rating:r.rating})),
+    ...TESTIMONIALS.map(q=>({text:q[lang]||q.en,who:q.who}))
+  ];
+  if(!all.length){
     box.style.display="block";
     box.innerHTML=`<div class="empty"><p>${t("t_empty")}</p><a class="btn btn-gold" href="#contact">${t("t_empty_btn")}</a></div>`;
     return;
   }
   box.style.display="";
-  box.innerHTML=TESTIMONIALS.map(q=>`<figure class="quote"><p>${q[lang]||q.en}</p><footer>— ${q.who}</footer></figure>`).join("");
+  box.innerHTML=all.map(q=>`<figure class="quote">${q.rating?`<div class="qstars" aria-label="${q.rating}/5">${"★".repeat(q.rating)}</div>`:""}<p>${q.text}</p><footer>— ${q.who}</footer></figure>`).join("");
+}
+async function loadReviews(){
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/testimonials?select=name,role,message,rating&approved=eq.true&order=created_at.desc&limit=20`,{headers:{apikey:SB_KEY}});
+    if(!r.ok)return;
+    STUDENT_REVIEWS=await r.json();renderQuotes();
+  }catch(e){}
 }
 
 /* method board */
@@ -620,6 +700,33 @@ form.addEventListener("submit",async ev=>{
   catch(e){status.className="status err";status.textContent=t("s_err")}
   finally{btn.disabled=false}
 });
+
+/* student feedback form (link to share with students: kinanchess.vercel.app/#feedback) */
+const fb=document.getElementById("feedback"),fbStatus=document.getElementById("fb-status"),fbOpen=document.getElementById("fb-open");
+function openFeedback(scroll){
+  fb.hidden=false;fbOpen.setAttribute("aria-expanded","true");
+  if(scroll)fb.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});
+  setTimeout(()=>document.getElementById("fb-name").focus({preventScroll:true}),scroll?500:0);
+}
+fbOpen.addEventListener("click",()=>{fb.hidden?openFeedback(true):(fb.hidden=true,fbOpen.setAttribute("aria-expanded","false"))});
+if(location.hash==="#feedback")openFeedback(true);
+addEventListener("hashchange",()=>{if(location.hash==="#feedback")openFeedback(true)});
+fb.addEventListener("submit",async ev=>{
+  ev.preventDefault();const btn=fb.querySelector("button[type=submit]");
+  if(fb.website.value)return; // bot trap
+  const name=fb.fb_name.value.trim(),message=fb.fb_msg.value.trim();
+  if(!name||message.length<10){fbStatus.className="status err";fbStatus.textContent=t("fb_req");return}
+  btn.disabled=true;fbStatus.className="status";fbStatus.textContent=t("s_sending");
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/testimonials`,{method:"POST",
+      headers:{apikey:SB_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},
+      body:JSON.stringify({name:name.slice(0,60),role:fb.fb_role.value,message:message.slice(0,1000),rating:+fb.rating.value,language:lang})});
+    if(!r.ok)throw 0;
+    fbStatus.className="status ok";fbStatus.textContent=t("fb_ok");fb.reset();
+  }catch(e){fbStatus.className="status err";fbStatus.textContent=t("fb_err")}
+  finally{btn.disabled=false}
+});
+loadReviews();
 </script>
 </body>
 </html>
