@@ -255,6 +255,7 @@ form .btn[disabled]{opacity:.6;cursor:wait}
         <a href="#method" data-i18n="nav_method">Method</a>
         <a href="#about" data-i18n="nav_about">About</a>
         <a href="#lessons" data-i18n="nav_lessons">Lessons</a>
+        <a href="#feedback" data-i18n="nav_feedback">Feedback</a>
         <a href="#contact" data-i18n="nav_contact">Contact</a>
       </nav>
       <div class="lang" role="group" aria-label="Language">
@@ -293,10 +294,6 @@ form .btn[disabled]{opacity:.6;cursor:wait}
         <path class="route" pathLength="1" d="M20 100 L20 20 L60 20"/>
         <circle class="dot" cx="60" cy="20" r="7"/>
       </svg>
-      <div class="badge">
-        <span class="num" id="count" data-to="2300">0</span>
-        <small data-i18n-html="badge">Lichess rapid rating<br>@knightKenan</small>
-      </div>
     </div>
   </div>
 </section>
@@ -373,7 +370,7 @@ form .btn[disabled]{opacity:.6;cursor:wait}
       </div>
       <div class="plan featured reveal d2">
         <h3 data-i18n="p3_name">Monthly package</h3>
-        <div class="price" data-i18n-html="p3_price">€80 <small>/ 4 lessons</small></div>
+        <div class="price" data-i18n-html="p3_price">€70 <small>/ 4 lessons</small></div>
         <ul>
           <li data-i18n="p3_a">One lesson every week</li>
           <li data-i18n="p3_b">Same day and time each week</li>
@@ -499,7 +496,7 @@ const TESTIMONIALS = [
 ];
 
 const T={en:{},fr:{
-nav_method:"Méthode",nav_about:"À propos",nav_lessons:"Cours",nav_contact:"Contact",
+nav_method:"Méthode",nav_about:"À propos",nav_lessons:"Cours",nav_contact:"Contact",nav_feedback:"Avis",
 hero_title:"Comprendre les échecs, pas seulement les apprendre par cœur.",
 hero_lead:"Cours d'échecs particuliers pour enfants et adultes, pour apprendre à réfléchir avant chaque coup, avec <strong>Kinan Alaridi</strong>.",
 fact_rapid:"en rapide",fact_peak:"Meilleur FIDE 2018",fact_lang:"Anglais et français",fact_where:"En ligne ou à Strasbourg",
@@ -525,7 +522,7 @@ price_title:"Des tarifs simples et justes",
 price_sub:"Commencez par un essai gratuit. Ensuite, continuez cours par cours ou économisez avec un forfait mensuel.",
 p1_name:"Cours d'essai",p1_price:"Gratuit <small>/ 30 min</small>",p1_a:"Faire connaissance",p1_b:"Évaluer votre niveau",p1_c:"Recevoir un plan de progression",p1_btn:"Réserver l'essai gratuit",
 p2_name:"Cours à l'unité",p2_price:"20 € <small>/ 60 min</small>",p2_a:"En individuel, en ligne ou en présentiel",p2_b:"Un cours construit sur vos parties",p2_c:"Des exercices après chaque cours",p2_btn:"Réserver un cours",
-p3_name:"Forfait mensuel",p3_price:"80 € <small>/ 4 cours</small>",p3_a:"Un cours chaque semaine",p3_b:"Le même jour et la même heure",p3_c:"Un bilan de progression chaque mois",p3_btn:"Commencer le forfait",
+p3_name:"Forfait mensuel",p3_price:"70 € <small>/ 4 cours</small>",p3_a:"Un cours chaque semaine",p3_b:"Le même jour et la même heure",p3_c:"Un bilan de progression chaque mois",p3_btn:"Commencer le forfait",
 kids_t:"Pour les enfants",kids_p:"Des cours patients et ludiques qui développent la concentration et la confiance. Les parents reçoivent un petit bilan chaque mois.",
 adults_t:"Pour les adultes",adults_p:"Arrêtez les gaffes, améliorez vos ouvertures et comprenez vos propres parties, du débutant au joueur de club.",
 how_title:"Comment ça marche",
@@ -665,10 +662,6 @@ document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",
 let saved=null;try{saved=localStorage.getItem("kc_lang")}catch(e){}
 setLang(saved||((navigator.language||"").toLowerCase().startsWith("fr")?"fr":"en"));
 
-/* counter */
-const cnt=document.getElementById("count"),to=+cnt.dataset.to;
-if(reduce)cnt.textContent=to+"+";
-else setTimeout(()=>{const t0=performance.now();(function f(n){const p=Math.min((n-t0)/1400,1),e=1-Math.pow(1-p,3);cnt.textContent=Math.round(to*e)+(p===1?"+":"");if(p<1)requestAnimationFrame(f)})(t0)},1200);
 
 /* scroll reveals + nav shadow */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15,rootMargin:"0px 0px -40px 0px"});
@@ -711,6 +704,7 @@ function openFeedback(scroll){
 fbOpen.addEventListener("click",()=>{fb.hidden?openFeedback(true):(fb.hidden=true,fbOpen.setAttribute("aria-expanded","false"))});
 if(location.hash==="#feedback")openFeedback(true);
 addEventListener("hashchange",()=>{if(location.hash==="#feedback")openFeedback(true)});
+document.querySelectorAll('a[href="#feedback"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();history.replaceState(null,"","#feedback");openFeedback(true)}));
 fb.addEventListener("submit",async ev=>{
   ev.preventDefault();const btn=fb.querySelector("button[type=submit]");
   if(fb.website.value)return; // bot trap
