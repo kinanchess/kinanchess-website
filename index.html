@@ -38,6 +38,13 @@ button{font-family:var(--sans)}
 .nav-links a{text-decoration:none;font-size:15px;opacity:.8;margin-left:20px;position:relative}
 .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .25s}
 .nav-links a:hover{opacity:1}.nav-links a:hover::after{transform:scaleX(1)}
+.burger{display:none;width:42px;height:42px;border:1px solid rgba(255,255,255,.25);border-radius:12px;background:none;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:0}
+.burger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:transform .25s,opacity .2s}
+.nav.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav.open .burger span:nth-child(2){opacity:0}
+.nav.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.quote .src{color:var(--gold);text-decoration:none;white-space:nowrap}
+.quote .src:hover{text-decoration:underline}
 .lang{display:flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
 .lang button{background:none;border:0;color:#fff;font-weight:600;font-size:13px;padding:6px 12px;cursor:pointer;opacity:.7}
 .lang button[aria-pressed="true"]{background:var(--gold);color:var(--navy);opacity:1}
@@ -222,7 +229,13 @@ form .btn[disabled]{opacity:.6;cursor:wait}
   .badge{left:12px}
   .knight-path{right:4px}
   .plans,.steps,.who,.quotes{grid-template-columns:1fr}
-  .nav-links{display:none}
+  .nav-right{gap:10px}
+  .burger{display:flex}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:#14120F;border-bottom:1px solid var(--line);padding:8px 24px 18px;box-shadow:0 18px 30px -12px rgba(0,0,0,.6)}
+  .nav.open .nav-links{display:flex}
+  .nav-links a{margin:0;padding:14px 0;font-size:18px;opacity:.9;border-bottom:1px solid rgba(255,255,255,.08)}
+  .nav-links a:last-child{border-bottom:0}
+  .nav-links a::after{display:none}
   section{padding:72px 0}
 }
 @media (max-width:520px){.row{grid-template-columns:1fr} form{padding:22px}}
@@ -251,7 +264,7 @@ form .btn[disabled]{opacity:.6;cursor:wait}
       <span>Kinan<b>Chess</b></span>
     </a>
     <div class="nav-right">
-      <nav class="nav-links">
+      <nav class="nav-links" id="nav-links">
         <a href="#method" data-i18n="nav_method">Method</a>
         <a href="#about" data-i18n="nav_about">About</a>
         <a href="#lessons" data-i18n="nav_lessons">Lessons</a>
@@ -262,6 +275,7 @@ form .btn[disabled]{opacity:.6;cursor:wait}
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-lang="fr" aria-pressed="false">FR</button>
       </div>
+      <button type="button" class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
@@ -493,10 +507,13 @@ form .btn[disabled]{opacity:.6;cursor:wait}
    {en:"Kinan taught me to slow down and look for threats.", fr:"Kinan m'a appris à ralentir et à chercher les menaces.", who:"Sarah, adult student"},
    While this list is empty, the page shows an invitation to book a trial instead. */
 const TESTIMONIALS = [
+  {en:"Kinan is an excellent teacher. He adapts each lesson perfectly to your level, takes the time to explain things clearly, and makes learning both enjoyable and accessible. I highly recommend him to anyone who wants to learn chess or improve their skills. You won't be disappointed!",
+   fr:"Kinan est un excellent professeur. Il adapte parfaitement chaque cours à votre niveau, prend le temps d'expliquer clairement et rend l'apprentissage à la fois agréable et accessible. Je le recommande vivement à tous ceux qui veulent apprendre les échecs ou progresser. Vous ne serez pas déçu !",
+   who:"Eve", rating:5, source:"ChessDial", url:"https://chessdial.com/coaches/6af47ad36fcb83df7c274730#reviews"},
 ];
 
 const T={en:{},fr:{
-nav_method:"Méthode",nav_about:"À propos",nav_lessons:"Cours",nav_contact:"Contact",nav_feedback:"Avis",
+nav_method:"Méthode",nav_about:"À propos",nav_lessons:"Cours",nav_contact:"Contact",nav_feedback:"Avis",via:"avis vérifié sur",menu:"Menu",
 hero_title:"Comprendre les échecs, pas seulement les apprendre par cœur.",
 hero_lead:"Cours d'échecs particuliers pour enfants et adultes, pour apprendre à réfléchir avant chaque coup, avec <strong>Kinan Alaridi</strong>.",
 fact_rapid:"en rapide",fact_peak:"Meilleur FIDE 2018",fact_lang:"Anglais et français",fact_where:"En ligne ou à Strasbourg",
@@ -560,7 +577,7 @@ t_empty:"My students' first reviews are coming soon. The best way to get to know
 t_empty_btn:"Book the free trial",
 s_sending:"Sending…",s_ok:"Thank you! Your message is sent. I'll reply within 24 hours.",
 s_err:"The message couldn't be sent. Check your connection and try again.",s_req:"Please fill in your name, email and message.",
-fb_req:"Please enter your first name and at least 10 characters of feedback.",
+via:"verified review on",fb_req:"Please enter your first name and at least 10 characters of feedback.",
 fb_ok:"Thank you so much! Your feedback was received and will appear on the site once approved.",
 fb_err:"Your feedback couldn't be sent. Check your connection and try again.",
 role_adult:"adult student",role_young:"young student",role_parent:"parent of a student"});
@@ -597,7 +614,8 @@ function renderQuotes(){
   const box=document.getElementById("quotes");
   const all=[
     ...STUDENT_REVIEWS.map(r=>({text:esc(r.message),who:esc(r.name)+(r.role?", "+esc(t("role_"+r.role)||r.role):""),rating:r.rating})),
-    ...TESTIMONIALS.map(q=>({text:q[lang]||q.en,who:q.who}))
+    ...TESTIMONIALS.map(q=>({text:q[lang]||q.en,rating:q.rating,
+      who:q.who+(q.source?` · <a class="src" href="${q.url}" target="_blank" rel="noopener">${t("via")} ${q.source}</a>`:"")}))
   ];
   if(!all.length){
     box.style.display="block";
@@ -693,6 +711,15 @@ form.addEventListener("submit",async ev=>{
   catch(e){status.className="status err";status.textContent=t("s_err")}
   finally{btn.disabled=false}
 });
+
+/* burger menu (mobile) */
+const burger=document.getElementById("burger");
+const setMenu=o=>{nav.classList.toggle("open",o);burger.setAttribute("aria-expanded",o)};
+burger.addEventListener("click",e=>{e.stopPropagation();setMenu(!nav.classList.contains("open"))});
+document.querySelectorAll("#nav-links a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
+addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false)});
+document.addEventListener("click",e=>{if(!nav.contains(e.target))setMenu(false)});
+addEventListener("resize",()=>{if(innerWidth>900)setMenu(false)});
 
 /* student feedback form (link to share with students: kinanchess.vercel.app/#feedback) */
 const fb=document.getElementById("feedback"),fbStatus=document.getElementById("fb-status"),fbOpen=document.getElementById("fb-open");
